@@ -8,6 +8,7 @@
 template <typename T>
 class TestInstance {
   abstract_tree<T> *abs_t;
+  const std::vector<T> &data;
 
  public:
   ~TestInstance() {
@@ -15,8 +16,25 @@ class TestInstance {
       delete (abs_t);
     }
   }
-  TestInstance(abstract_tree<T> *ins) { abs_t = ins; }
+  TestInstance(const std::vector<T> &v): abs_t(nullptr), data(v) { };
+  void build(int type){
+    if(abs_t){
+      delete(abs_t);
+      abs_t = nullptr;
+    }
+    switch(type){
+      case 0:
+      abs_t = new array_tree<T>(data);
+      break;
+      default:
+      abs_t = new zkw_tree<T>(data);
+      break;
+    }
+  }
   int operator()(void) const {
+    if(abs_t == nullptr){
+      return -1;
+    }
     int size = abs_t->get_size();
     for (int i = 0; i < 1000; i++) {
       int l = test<int>::random(0, size - 2);
@@ -28,6 +46,7 @@ class TestInstance {
     return 0;
   }
 };
+
 int main() {
   int n = 0, cycle = 0;
   while (1) {
@@ -44,12 +63,11 @@ int main() {
     for (int i = 0; i < n; ++i) {
       v[i] = test<int>::random(0, 100000);
     }
-    TestInstance<int> arr_test(new array_tree<int>(v));
-    TestInstance<int> zkw_test(new zkw_tree<int>(v));
-    std::cout << "Data generated, Begin test!" << std::endl;
-    long arr_time = test<TestInstance<int>>(&arr_test).exec(cycle);
-    std::cout << "Test array tree: time = " << arr_time << std::endl;
-    long zkw_time = test<TestInstance<int>>(&zkw_test).exec(cycle);
-    std::cout << "Test zkw tree: time = " << zkw_time << std::endl;
+    std::cout<<"Testing array tree, please wait..."<<std::endl;
+    long arr_time = (test<TestInstance<int>>(TestInstance<int>(v))).exec(cycle, 0);
+    std::cout << "Array tree test finished in " << arr_time <<"ms!"<< std::endl;
+    std::cout << "Test zkw tree, please wait..."<<std::endl;
+    long zkw_time = (test<TestInstance<int>>(TestInstance<int>(v))).exec(cycle, 1);
+    std::cout << "ZKW tree test finished in " << zkw_time << "ms" << std::endl;
   }
 }
