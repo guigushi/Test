@@ -2,46 +2,50 @@
 
 #include <iostream>
 
-#include "array_tree/abstract_tree.h"
-#include "array_tree/array_tree.h"
-#include "array_tree/zkw_tree.h"
+#include "ArrayTree/AbstractTree.h"
+#include "ArrayTree/ArrayTree.h"
+#include "ArrayTree/SegmentTree.h"
+#include "ArrayTree/ZKWTree.h"
 template <typename T>
 class TestInstance {
-  abstract_tree<T> *abs_t;
+  AbstractTree<T> *absTree;
   const std::vector<T> &data;
 
  public:
   ~TestInstance() {
-    if (abs_t) {
-      delete (abs_t);
+    if (absTree) {
+      delete (absTree);
     }
   }
-  TestInstance(const std::vector<T> &v): abs_t(nullptr), data(v) { };
-  void build(int type){
-    if(abs_t){
-      delete(abs_t);
-      abs_t = nullptr;
+  TestInstance(const std::vector<T> &v) : absTree(nullptr), data(v){};
+  void build(int type) {
+    if (absTree) {
+      delete (absTree);
+      absTree = nullptr;
     }
-    switch(type){
+    switch (type) {
       case 0:
-      abs_t = new array_tree<T>(data);
-      break;
+        absTree = new ArrayTree<T>(data);
+        break;
+      case 1:
+        absTree = new ZKWTree<T>(data);
+        break;
       default:
-      abs_t = new zkw_tree<T>(data);
-      break;
+        absTree = new SegmentTree<T>(data);
+        break;
     }
   }
   int operator()(void) const {
-    if(abs_t == nullptr){
+    if (absTree == nullptr) {
       return -1;
     }
-    int size = abs_t->get_size();
-    for (int i = 0; i < 1000; i++) {
+    int size = absTree->get_size();
+    for (int i = 0; i < 1; i++) {
       int l = test<int>::random(0, size - 2);
       int r = test<int>::random(l, size - 1);
-      int v = test<int>::random(-1000, 1000);
-      abs_t->update(l, r, v);
-      abs_t->query(l, r);
+      int v = test<int>::random(0, 10);
+      absTree->update(l, r, v);
+      absTree->query(l, r);
     }
     return 0;
   }
@@ -59,16 +63,21 @@ int main() {
       std::cout << "Error input, program terminated!" << std::endl;
       return 0;
     }
-    std::vector<int> v(n, 0);
+    std::vector<long> v(n, 0);
     for (int i = 0; i < n; ++i) {
-      v[i] = test<int>::random(0, 100000);
+      v[i] = test<long>::random(0, 100);
     }
-    TestInstance<int> testIns(v);
-    std::cout<<"Testing array tree, please wait..."<<std::endl;
-    long arr_time = test<TestInstance<int>>(testIns).exec(cycle, 0);
-    std::cout << "Array tree test finished in " << arr_time <<"ms!"<< std::endl;
-    std::cout << "Test zkw tree, please wait..."<<std::endl;
-    long zkw_time = test<TestInstance<int>>(testIns).exec(cycle, 1);
+    TestInstance<long> testIns(v);
+    std::cout << "Testing array tree, please wait..." << std::endl;
+    long arr_time = test<TestInstance<long>>(testIns).exec(cycle, 0);
+    std::cout << "Array tree test finished in " << arr_time << "ms!"
+              << std::endl;
+    std::cout << "Testing zkw tree, please wait..." << std::endl;
+    long zkw_time = test<TestInstance<long>>(testIns).exec(cycle, 1);
     std::cout << "ZKW tree test finished in " << zkw_time << "ms!" << std::endl;
+    std::cout << "Testint Segment tree, please wait..." << std::endl;
+    long seg_time = test<TestInstance<long>>(testIns).exec(cycle, 2);
+    std::cout << "Segment tree test finished in " << seg_time << "ms!"
+              << std::endl;
   }
 }

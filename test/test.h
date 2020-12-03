@@ -1,6 +1,7 @@
 #include <sys/timeb.h>
 #include <time.h>
 
+#include <cstdlib>
 #include <functional>
 #include <random>
 #include <vector>
@@ -10,15 +11,15 @@ class test {
   long init_time;
 
  public:
-  test(const T& _func):func(_func) {
+  test(const T& _func) : func(_func) {
     timeb tb;
     ftime(&tb);
     init_time = tb.time;
   }
   static int random(int l, int r) {
-    std::default_random_engine gen;
-    std::uniform_int_distribution<int> dist(l, r);
-    return dist(gen);
+    // std::default_random_engine gen;
+    // std::uniform_int_distribution<int> dist(l, r);
+    return rand() % (r - l) + l;  // dist(gen);
   }
   long get_time(void) {
     timeb tb;

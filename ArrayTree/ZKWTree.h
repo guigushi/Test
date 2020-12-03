@@ -1,25 +1,25 @@
-#ifndef ZKW_TREE_H__
-#define ZKW_TREE_H__
+#ifndef ZKWTree_H__
+#define ZKWTree_H__
 #include <vector>
 template <typename T>
-class zkw_tree : public abstract_tree<T> {
+class ZKWTree : public AbstractTree<T> {
  private:
   std::vector<T> sum;
   std::vector<T> tag;
-  int M;
-  int n;
+  T M;
+  T n;
 
  public:
-  zkw_tree(const std::vector<int>& array) {
-    new (this) zkw_tree(array.size());
-    for (int i = 1; i < n; i++) {
+  ZKWTree(const std::vector<T>& array) {
+    new (this) ZKWTree(array.size());
+    for (T i = 1; i < n; i++) {
       sum[M + i] = array[i];
     }
-    for (int i = M - 1; i; i--) {
+    for (T i = M - 1; i; i--) {
       sum[i] = sum[i << 1] + sum[i << 1 | 1];
     }
   }
-  zkw_tree(const int& _n) {
+  ZKWTree(const T& _n) {
     n = _n;
     M = 1;
     while (M < n + 2) {
@@ -28,8 +28,8 @@ class zkw_tree : public abstract_tree<T> {
     sum.resize(M << 1, 0);
     tag.resize(M << 1, 0);
   }
-  int get_size(void) { return n; }
-  void update(int l, int r, T del) {
+  T get_size(void) { return n; }
+  void update(T l, T r, T del) {
     T len = 1, lc = 0, rc = 0;
     for (l = l + M - 1, r = r + M + 1; l ^ r ^ 1; l >>= 1, r >>= 1, len <<= 1) {
       if (~l & 1) {
@@ -45,7 +45,7 @@ class zkw_tree : public abstract_tree<T> {
       sum[l] += del * lc;
     }
   }
-  T query(int l, int r) {
+  T query(T l, T r) {
     T res = 0, len = 1, lc = 0, rc = 0;
     for (l = l + M - 1, r = r + M + 1; l ^ r ^ 1; l >>= 1, r >>= 1, len <<= 1) {
       if (~l & 1) {
