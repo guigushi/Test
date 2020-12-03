@@ -63,11 +63,12 @@ int main() {
     for (int i = 0; i < n; ++i) {
       v[i] = test<int>::random(0, 100000);
     }
+    TestInstance<int> testIns(v);
     std::cout<<"Testing array tree, please wait..."<<std::endl;
-    long arr_time = (test<TestInstance<int>>(TestInstance<int>(v))).exec(cycle, 0);
+    long arr_time = test<TestInstance<int>>(testIns).exec(cycle, 0);
     std::cout << "Array tree test finished in " << arr_time <<"ms!"<< std::endl;
     std::cout << "Test zkw tree, please wait..."<<std::endl;
-    long zkw_time = (test<TestInstance<int>>(TestInstance<int>(v))).exec(cycle, 1);
-    std::cout << "ZKW tree test finished in " << zkw_time << "ms" << std::endl;
+    long zkw_time = test<TestInstance<int>>(testIns).exec(cycle, 1);
+    std::cout << "ZKW tree test finished in " << zkw_time << "ms!" << std::endl;
   }
 }
