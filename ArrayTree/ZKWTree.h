@@ -28,7 +28,7 @@ class ZKWTree : public AbstractTree<T> {
     sum.resize(M << 1, 0);
     tag.resize(M << 1, 0);
   }
-  T get_size(void) { return n; }
+  T getSize(void) { return n; }
   void update(T l, T r, T del) {
     T len = 1, lc = 0, rc = 0;
     for (l = l + M - 1, r = r + M + 1; l ^ r ^ 1; l >>= 1, r >>= 1, len <<= 1) {

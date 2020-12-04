@@ -19,7 +19,7 @@ class SegmentTree : public AbstractTree<T> {
   T ask(T rt, T l, T r, T s, T t);
 
  public:
-  T get_size(void) { return size; }
+  T getSize(void) { return size; }
   SegmentTree(T n);
   SegmentTree(const std::vector<T> &data);
   void update(T l, T r, T val);

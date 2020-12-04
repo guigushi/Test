@@ -30,11 +30,7 @@ class ArrayTree : public AbstractTree<T> {
   }
 
  public:
-  ArrayTree(T _n) {
-    n = _n + 1;
-    df.resize(n, 0);
-    mf.resize(n, 0);
-  }
+  ArrayTree(T _n) : n(_n + 1), df(n, 0), mf(n, 0) {}
   ArrayTree(const std::vector<T>& v) {
     new (this) ArrayTree(v.size());
     if (v.size() > 0) {
@@ -44,7 +40,7 @@ class ArrayTree : public AbstractTree<T> {
       }
     }
   }
-  T get_size(void) { return n - 1; }
+  T getSize(void) { return n - 1; }
   void update(T l, T r, T v) {
     add(l, v);
     add(r + 1, -v);
